@@ -212,9 +212,10 @@ export default async (
               break;
           }
           return {
-            x: source[item.x] || item.x,
+            name: source[item.x] || item.x,
+            icon: icon,
+            x: item.x,
             y: item.y,
-            z: icon,
           };
         });
       }
