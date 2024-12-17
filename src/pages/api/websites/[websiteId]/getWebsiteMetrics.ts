@@ -214,7 +214,7 @@ export default async (
           return {
             x: source[item.x] || item.x,
             y: item.y,
-            z: icon || '',
+            z: icon,
           };
         });
       }
