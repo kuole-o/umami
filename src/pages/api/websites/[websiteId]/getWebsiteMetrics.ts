@@ -15,6 +15,7 @@ import {
   BROWSERS,
 } from 'lib/constants';
 import { getCompareDate } from 'lib/date';
+import countryNames from 'public/intl/country/zh-CN.json';
 
 export interface CombinedMetricsRequestQuery {
   websiteId: string;
@@ -178,6 +179,7 @@ export default async (
 
     const formattedData = async (data: dataType, type: string) => {
       let source: SourceType;
+      let icon: string;
       switch (type) {
         case 'os':
           source = OS_NAMES;
@@ -185,21 +187,45 @@ export default async (
         case 'browser':
           source = BROWSERS;
           break;
+        case 'country':
+          source = countryNames;
+          break;
       }
       if (source) {
-        return data.map((item: ItemType) => ({
-          x: source[item.x] || item.x,
-          y: item.y,
-        }));
+        return data.map((item: ItemType) => {
+          const itemName: string = item.x.toLowerCase().replace(/ /g, '-');
+          switch (type) {
+            case 'os':
+              icon = `//umami.guole.fun/images/os/${itemName}.png`;
+              break;
+            case 'browser':
+              icon = `//umami.guole.fun/images/browser/${itemName}.png`;
+              break;
+            case 'country':
+              icon = `//umami.guole.fun/images/country/${itemName}.png`;
+              break;
+            case 'device':
+              icon = `//umami.guole.fun/images/device/${itemName}.png`;
+              break;
+            default:
+              icon = '';
+              break;
+          }
+          return {
+            x: source[item.x] || item.x,
+            y: item.y,
+            z: icon || '',
+          };
+        });
       }
       return false;
     };
 
     // 返回合并的结果
     return ok(res, {
-      os: (await formattedData(osData, 'os')) || osData || [],
-      browser: (await formattedData(browserData, 'browser')) || browserData || [],
-      country: (await formattedData(countryData, 'country')) || countryData || [],
+      os: (await formattedData(osData, 'os')) || [],
+      browser: (await formattedData(browserData, 'browser')) || [],
+      country: (await formattedData(countryData, 'country')) || [],
       stats: stats || [],
     });
   }

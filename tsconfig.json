@@ -32,7 +32,8 @@
       "pages/*": ["./pages/*"],
       "queries/*": ["./queries/*"],
       "store/*": ["./store/*"],
-      "styles/*": ["./styles/*"]
+      "styles/*": ["./styles/*"],
+      "public/*": ["../public/*"]
     },
     "plugins": [
       {
