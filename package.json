@@ -10,7 +10,7 @@
     "url": "https://github.com/umami-software/umami.git"
   },
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev -p 8000",
     "build": "npm-run-all check-env build-db check-db build-tracker build-geo build-app",
     "build-dev": "npm-run-all check-env build-db check-db build-tracker build-app",
     "start": "next start",

@@ -17,21 +17,22 @@ import { getUser } from '../queries';
 
 const log = debug('umami:middleware');
 
-export const useCors = createMiddleware(
+export const useCors = createMiddleware((req, res, next) => {
   cors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback) => {
       const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || '').split(',');
       // 如果没有提供 origin，允许请求
       if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
+        res.setHeader('Access-Control-Allow-Origin', origin || '');
+        callback(null, true);
       } else {
-          callback(new Error('Not allowed by CORS'));
+        callback(new Error('Not allowed by CORS'));
       }
     },
     // Cache CORS preflight request 24 hours by default
     maxAge: Number(process.env.CORS_MAX_AGE) || 86400,
-  }),
-);
+  })(req, res, next);
+});
 
 export const useSession = createMiddleware(async (req, res, next) => {
   try {
