@@ -14,15 +14,25 @@ import {
 } from 'next-basics';
 import { NextApiRequestCollect } from 'pages/api/send';
 import { getUser } from '../queries';
+import { NextApiRequest } from 'next';
 
 const log = debug('umami:middleware');
 
-export const useCors = createMiddleware((req, res, next) => {
+interface NextApiRequestWithPath extends NextApiRequest {
+  path?: string;
+}
+
+export const useCors = createMiddleware((req: NextApiRequestWithPath, res, next) => {
   cors({
     origin: (origin: string | undefined, callback) => {
       const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || '').split(',');
       // 如果没有提供 origin，允许请求
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        (process.env.CORS_ALLOWED_HOST && origin?.endsWith(process.env.CORS_ALLOWED_HOST)) ||
+        (req.path && req.path === '/api/send')
+      ) {
         res.setHeader('Access-Control-Allow-Origin', origin || '');
         callback(null, true);
       } else {
