@@ -27,7 +27,7 @@
   color: var(--base900);
 }
 
-.button.disabled {
+/* .button.disabled {
   color: var(--disabled-color) !important;
   background-color: var(--disabled-background) !important;
   border-color: transparent !important;
@@ -104,4 +104,4 @@
   font-size: var(--font-size-lg);
   height: calc(var(--base-height) * 1.25);
   padding: 0 calc(var(--size600) * 1.25);
-}
+} */
